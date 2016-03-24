@@ -308,17 +308,16 @@ public class RoliedexLayout extends LinearLayout {
         if (decimalIndex == -1) {
             decimalIndex = digits.length;
         }
-        // only add the digits we support
 
         int index = 0;
-        for (int i = decimalIndex - 1; i >= 0; i--) {
-            digNums[index++] = ((int) digits[i]) - 48; // char ASCII 48 = Decimal 0
+        for (int i = decimalIndex - 1; i >= 0 && index < digNums.length; i--, index++) {
+            digNums[index] = ((int) digits[i]) - 48; // char ASCII 48 = Decimal 0
         }
 
         if (value % 1 > 0 || forceDedimal) {
             index = 0;
-            for (int i = decimalIndex + 1; i < digits.length; i++) {
-                decNums[index++] = ((int) digits[i]) - 48; // char ASCII 48 = Decimal 0
+            for (int i = decimalIndex + 1; i < digits.length && index < decNums.length; i++, index++) {
+                decNums[index] = ((int) digits[i]) - 48; // char ASCII 48 = Decimal 0
             }
         }
     }
