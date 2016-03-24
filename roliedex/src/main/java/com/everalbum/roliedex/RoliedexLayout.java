@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class RoliedexLayout extends LinearLayout {
 
@@ -40,10 +41,11 @@ public class RoliedexLayout extends LinearLayout {
 
     // digNums[0] is the ones, digNums[1] is tens, and so on
     private int[] digNums;
-    // digNums[0] is the tenths, digNums[1] is hundredths, and so on
+    // decNums[0] is the tenths, decNums[1] is hundredths, and so on
     private int[] decNums;
 
-    private int     animCounter;
+    private Random  random;
+
     private boolean forceDedimal;
     private double  value;
     private long    animationStartTime;
@@ -75,12 +77,13 @@ public class RoliedexLayout extends LinearLayout {
                                   getColor(android.R.color.black));
         numberOfDigits = attr.getInt(R.styleable.RoliedexLayout_numberOfDigits, 3);
         numberOfDecimals = attr.getInt(R.styleable.RoliedexLayout_numberOfDecimals, 2);
-        slideInAnimation = attr.getInt(R.styleable.RoliedexLayout_numberOfDigits,
-                                       R.anim.slide_in_from_bottom);
-        slideOutAnimation = attr.getInt(R.styleable.RoliedexLayout_numberOfDecimals,
-                                        R.anim.slide_out_to_top);
+        slideInAnimation = attr.getResourceId(R.styleable.RoliedexLayout_slideInAnimation,
+                                              R.anim.slide_in_from_bottom);
+        slideOutAnimation = attr.getResourceId(R.styleable.RoliedexLayout_slideOutAnimation,
+                                               R.anim.slide_out_to_top);
         attr.recycle();
 
+        random = new Random();
         digits = new ArrayList<>();
         decimals = new ArrayList<>();
 
@@ -138,21 +141,24 @@ public class RoliedexLayout extends LinearLayout {
     private Animation getInAnimation() {
         Animation animation = AnimationUtils.loadAnimation(getContext(),
                                                            slideInAnimation);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                startNextAnimation();
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
+        animation.setAnimationListener(new TextSwitcherAnim());
         return animation;
+    }
+
+    private class TextSwitcherAnim implements Animation.AnimationListener {
+
+        @Override
+        public void onAnimationStart(Animation animation) {
+        }
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+            startNextAnimation();
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+        }
     }
 
     public void startNextAnimation() {
@@ -162,57 +168,61 @@ public class RoliedexLayout extends LinearLayout {
         }
         final long animationTime = System.currentTimeMillis() - animationStartTime;
         if (animationTime >= animDuration) {
-            animationEnded = true;
-
-            // always set at least one digit
-            digits.get(digits.size() - 1)
-                  .setText(DIGITS[digNums[0]]);
-
-            int multiplier = 1;
-            int digNumIndex = 0;
-            for (int i = digits.size() - 2; i >= 0; i--) {
-                multiplier *= 10;
-                digNumIndex++;
-                if ((value * multiplier) > multiplier) {
-                    digits.get(i)
-                          .setText(DIGITS[digNums[digNumIndex]]);
-                }
-            }
-
-            if (forceDedimal) {
-                for (int i = 0; i < decimals.size(); i++) {
-                    decimals.get(i)
-                            .setText(DIGITS[decNums[i]]);
-                }
-            }
+            finishAnimation();
             return;
         }
 
-        animCounter++;
-        if (animCounter > 9) {
-            animCounter = 0;
-        }
+        spinAllSwitchers();
+    }
+
+    private void spinAllSwitchers() {
         // deal with digits
         digits.get(digits.size() - 1)
-              .setText(DIGITS[animCounter]);
+              .setText(DIGITS[random.nextInt(10)]);
 
         int multiplier = 1;
         for (int i = digits.size() - 2; i >= 0; i--) {
-            if (digits.get(i).getVisibility() == GONE) {
+            if (digits.get(i)
+                      .getVisibility() == GONE) {
                 // reached the end, quit
                 break;
             }
             multiplier *= 10;
             if ((value * multiplier) > (multiplier - 1)) {
                 digits.get(i)
-                      .setText(DIGITS[(animCounter += 1) % 10]);
+                      .setText(DIGITS[random.nextInt(10)]);
             }
         }
 
-        if (forceDedimal) {
+        if (value % 1 > 0 || forceDedimal) {
             for (int i = 0; i < decimals.size(); i++) {
                 decimals.get(i)
-                        .setText(DIGITS[(animCounter += 2) % 10]);
+                        .setText(DIGITS[random.nextInt(10)]);
+            }
+        }
+    }
+
+    private void finishAnimation() {
+        animationEnded = true;
+
+        // always set at least one digit
+        digits.get(digits.size() - 1)
+              .setText(DIGITS[digNums[0]]);
+
+        int multiplier = 1;
+        int digNumIndex = 0;
+        for (int i = digits.size() - 2; i >= 0; i--) {
+            multiplier *= 10;
+            if ((value * multiplier) > multiplier) {
+                digits.get(i)
+                      .setText(DIGITS[digNums[digNumIndex++]]);
+            }
+        }
+
+        if (value % 1 > 0 || forceDedimal) {
+            for (int i = 0; i < decimals.size(); i++) {
+                decimals.get(i)
+                        .setText(DIGITS[decNums[i]]);
             }
         }
     }
