@@ -31,40 +31,41 @@ dependencies {
     testCompile 'org.assertj:assertj-core:1.7.1'
 }
 
-task createPom {
-    pom {
-        project {
-            packaging 'jar'
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'jar'
 
-            // Add your description here
-            name 'roliedex'
-            description 'An Android View to show independently spinning digits.'
-            url 'https://github.com/everalbum/roliedex'
-
-            // Set your license
-            licenses {
-                license {
-                    name 'The BSD 3-Clause License'
-                    url 'https://github.com/everalbum/roliedex/blob/master/LICENSE'
-                }
-            }
-
-            developers {
-                developer {
-                    id 'everalbum'
-                    name 'Everalbum, Inc.'
-                    email 'ralph@everalbum.com'
-                }
-            }
-            scm {
-                connection 'https://github.com/everalbum/roliedex'
-                developerConnection 'https://github.com/everalbum/roliedex'
+                // Add your description here
+                name 'roliedex'
+                description 'An Android View to show independently spinning digits.'
                 url 'https://github.com/everalbum/roliedex'
+
+                // Set your license
+                licenses {
+                    license {
+                        name 'The BSD 3-Clause License'
+                        url 'https://github.com/everalbum/roliedex/blob/master/LICENSE'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'everalbum'
+                        name 'Everalbum, Inc.'
+                        email 'ralph@everalbum.com'
+                    }
+                }
+                scm {
+                    connection 'https://github.com/everalbum/roliedex'
+                    developerConnection 'https://github.com/everalbum/roliedex'
+                    url 'https://github.com/everalbum/roliedex'
+                }
             }
         }
-    }.writeTo("$buildDir/poms/pom-default.xml").writeTo("pom.xml")
+    }
 }
-build.dependsOn createPom
 
 task androidJavadocs(type: Javadoc) {
     options {
@@ -81,26 +82,12 @@ task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
 }
 
 task androidSourcesJar(type: Jar) {
-    classifier = 'sources'
     from "src/main/java"
 }
 
 artifacts {
     archives androidSourcesJar
     archives androidJavadocsJar
-}
-
-android.libraryVariants.all { variant ->
-    task("generate${variant.name}Javadoc", type: Javadoc) {
-        description "Generates Javadoc for $variant.name."
-        source = variant.javaCompile.source
-        ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
-        classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
-        options.links("http://docs.oracle.com/javase/7/docs/api/");
-        options.links("http://d.android.com/reference/");
-        exclude '**/BuildConfig.java'
-        exclude '**/R.java'
-    }
 }
 
 Properties properties = new Properties()
@@ -119,6 +106,8 @@ bintray {
         vcsUrl = 'https://github.com/everalbum/roliedex.git'
         userOrg = 'everalbum'
         licenses = ['MIT']
+        publish = true
+        publicDownloadNumbers = true
         version {
             name = version
             desc = 'An Android View to show independently spinning digits.'
