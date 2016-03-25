@@ -2,6 +2,8 @@
 
 An Android View to show independently spinning digits.
 
+![Demo](/roliedex_demo_.gif "roliedex demo")
+
 ## Usage
 
 Take a look at the same app included in this repo for usages. A typical case may look like this:
