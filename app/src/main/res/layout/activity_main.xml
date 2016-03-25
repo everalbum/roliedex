@@ -5,30 +5,85 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.everalbum.roliedex.sample.MainActivity"
-    android:orientation="vertical">
+    tools:context="com.everalbum.roliedex.sample.MainActivity">
 
     <TextView
-        android:id="@+id/hello_world"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"/>
+        android:text="@string/enter_text"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="18sp"/>
 
-    <EditText
-        android:id="@+id/enter_text"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"/>
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/number"
+                android:textColor="@android:color/black"
+                android:textSize="13sp"/>
+
+            <EditText
+                android:id="@+id/enter_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:inputType="numberDecimal"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/decorator"
+                android:textColor="@android:color/black"
+                android:textSize="13sp"/>
+
+            <EditText
+                android:id="@+id/enter_decorator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"/>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/switch_force_decimals"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="@string/force_decimals"/>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/try_it_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/try_it_yo"/>
+        android:text="@string/try_it"/>
 
     <com.everalbum.roliedex.RoliedexLayout
         android:id="@+id/counter"
@@ -38,6 +93,33 @@
         android:orientation="horizontal"
         app:textColor="#008eff"
         app:textSize="40"
+        />
+
+    <com.everalbum.roliedex.RoliedexLayout
+        android:id="@+id/slow_counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:numberOfDecimals="1"
+        app:numberOfDigits="4"
+        app:slideInAnimation="@anim/slide_in_from_bottom_slower"
+        app:slideOutAnimation="@anim/slide_out_to_top_slower"
+        app:textColor="@android:color/black"
+        app:textSize="20"
+        />
+
+    <com.everalbum.roliedex.RoliedexLayout
+        android:id="@+id/longer_counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:animDuraction="2000"
+        app:numberOfDecimals="4"
+        app:numberOfDigits="5"
+        app:slideInAnimation="@anim/slide_in_from_bottom_slower"
+        app:slideOutAnimation="@anim/slide_out_to_top_slower"
         />
 
 </LinearLayout>

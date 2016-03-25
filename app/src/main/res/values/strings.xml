@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Roliedex Sample</string>
-    <string name="try_it_yo">Try It Yo!</string>
+    <string name="try_it">Try It!</string>
+    <string name="enter_text">Enter a numer and optional decorator:</string>
+    <string name="force_decimals">Force Decimals</string>
+    <string name="decorator">Decorator</string>
+    <string name="number">Number</string>
 </resources>
