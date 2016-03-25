@@ -16,7 +16,6 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class RoliedexLayout extends LinearLayout {
@@ -31,10 +30,10 @@ public class RoliedexLayout extends LinearLayout {
     private int  slideInAnimation;
     private int  slideOutAnimation;
 
-    // digits.get(digits.size() - 1) is the ones, digits.get(digits.size() - 2) is tens, and so on
-    private final ArrayList<TextSwitcher> digits;
-    // decimals.get(0) is the tenths, decimals.get(1) is hundredths, and so on
-    private final ArrayList<TextSwitcher> decimals;
+    // digits[0] is the ones, digits[1] is tens, and so on
+    private final TextSwitcher[] digits;
+    // decimals[0] is the tenths, decimals[1] is hundredths, and so on
+    private final TextSwitcher[] decimals;
 
     private TextSwitcher decimalPoint;
     private TextSwitcher decorator;
@@ -44,7 +43,7 @@ public class RoliedexLayout extends LinearLayout {
     // decNums[0] is the tenths, decNums[1] is hundredths, and so on
     private int[] decNums;
 
-    private Random  random;
+    private Random random;
 
     private boolean forceDedimal;
     private double  value;
@@ -84,8 +83,8 @@ public class RoliedexLayout extends LinearLayout {
         attr.recycle();
 
         random = new Random();
-        digits = new ArrayList<>();
-        decimals = new ArrayList<>();
+        digits = new TextSwitcher[numberOfDigits];
+        decimals = new TextSwitcher[numberOfDecimals];
 
         if (isInEditMode()) {
             return;
@@ -93,10 +92,10 @@ public class RoliedexLayout extends LinearLayout {
 
         TextSwitcher ts;
 
-        for (int i = 0; i < numberOfDigits; i++) {
+        for (int i = numberOfDigits - 1; i >= 0; i--) {
             ts = new TextSwitcher(context);
             setupTextSwitcher(ts);
-            digits.add(ts);
+            digits[i] = ts;
             addView(ts);
         }
 
@@ -109,7 +108,7 @@ public class RoliedexLayout extends LinearLayout {
         for (int i = 0; i < numberOfDecimals; i++) {
             ts = new TextSwitcher(context);
             setupTextSwitcher(ts);
-            decimals.add(ts);
+            decimals[i] = ts;
             addView(ts);
         }
 
@@ -177,27 +176,23 @@ public class RoliedexLayout extends LinearLayout {
 
     private void spinAllSwitchers() {
         // deal with digits
-        digits.get(digits.size() - 1)
-              .setText(DIGITS[random.nextInt(10)]);
+        digits[0].setText(DIGITS[random.nextInt(10)]);
 
         int multiplier = 1;
-        for (int i = digits.size() - 2; i >= 0; i--) {
-            if (digits.get(i)
-                      .getVisibility() == GONE) {
+        for (int i = 1; i < digits.length; i++) {
+            if (digits[i].getVisibility() == GONE) {
                 // reached the end, quit
                 break;
             }
             multiplier *= 10;
             if ((value * multiplier) > (multiplier - 1)) {
-                digits.get(i)
-                      .setText(DIGITS[random.nextInt(10)]);
+                digits[i].setText(DIGITS[random.nextInt(10)]);
             }
         }
 
         if (value % 1 > 0 || forceDedimal) {
-            for (int i = 0; i < decimals.size(); i++) {
-                decimals.get(i)
-                        .setText(DIGITS[random.nextInt(10)]);
+            for (int i = 0; i < decimals.length; i++) {
+                decimals[i].setText(DIGITS[random.nextInt(10)]);
             }
         }
     }
@@ -206,23 +201,19 @@ public class RoliedexLayout extends LinearLayout {
         animationEnded = true;
 
         // always set at least one digit
-        digits.get(digits.size() - 1)
-              .setText(DIGITS[digNums[0]]);
+        digits[0].setText(DIGITS[digNums[0]]);
 
         int multiplier = 1;
-        int digNumIndex = 0;
-        for (int i = digits.size() - 2; i >= 0; i--) {
+        for (int i = 1; i < digits.length; i++) {
             multiplier *= 10;
             if ((value * multiplier) > multiplier) {
-                digits.get(i)
-                      .setText(DIGITS[digNums[digNumIndex++]]);
+                digits[i].setText(DIGITS[digNums[i]]);
             }
         }
 
         if (value % 1 > 0 || forceDedimal) {
-            for (int i = 0; i < decimals.size(); i++) {
-                decimals.get(i)
-                        .setText(DIGITS[decNums[i]]);
+            for (int i = 0; i < decimals.length; i++) {
+                decimals[i].setText(DIGITS[decNums[i]]);
             }
         }
     }
@@ -253,8 +244,8 @@ public class RoliedexLayout extends LinearLayout {
     }
 
     protected void clearPastDigitsAndDecimals() {
-        digNums = new int[digits.size()];
-        decNums = new int[decimals.size()];
+        digNums = new int[digits.length];
+        decNums = new int[decimals.length];
     }
 
     private void setupDecorator(String decorator) {
@@ -284,15 +275,13 @@ public class RoliedexLayout extends LinearLayout {
         }
         if (zeroIndex == 0) {
             // all zeros, hide all minus last
-            for (int i = 0; i < digits.size() - 1; i++) {
-                digits.get(i)
-                      .setVisibility(GONE);
+            for (int i = 1; i < digits.length; i++) {
+                digits[i].setVisibility(GONE);
             }
             return;
         }
-        for (int i = zeroIndex; i >= 0; i--) {
-            digits.get(i)
-                  .setVisibility(GONE);
+        for (int i = zeroIndex; i < digits.length; i++) {
+            digits[i].setVisibility(GONE);
         }
     }
 

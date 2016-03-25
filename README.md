@@ -28,7 +28,6 @@ Take a look at the same app included in this repo for usages. A typical case may
     </LinearLayout>
     ```
 
-
 Below is also documentation on the individual attributes we support.
 
 ## Supported attributes (with default values)

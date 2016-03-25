@@ -101,6 +101,8 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        app:numberOfDecimals="1"
+        app:numberOfDigits="4"
         app:slideInAnimation="@anim/slide_in_from_bottom_slower"
         app:slideOutAnimation="@anim/slide_out_to_top_slower"
         app:textColor="@android:color/black"
@@ -114,6 +116,8 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:animDuraction="2000"
+        app:numberOfDecimals="4"
+        app:numberOfDigits="5"
         app:slideInAnimation="@anim/slide_in_from_bottom_slower"
         app:slideOutAnimation="@anim/slide_out_to_top_slower"
         />
