@@ -92,3 +92,4 @@ Below is also documentation on the individual attributes we support.
  - We only support positive, greater than zero values.
  - We currently show all trailing decimal digits. So if the number is `0.1` and you pass `app:numberOfDecimals="2"` we will display `0.10`.
  - We currently do not support commas or dots to format large numbers.
+ - No localization support :(
