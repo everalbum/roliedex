@@ -29,8 +29,28 @@ Take a look at the same app included in this repo for usages. A typical case may
             
     </LinearLayout>
     ```
-
+    
 Below is also documentation on the individual attributes we support.
+
+## Including Library
+
+Simply imported it into your gradle project like so:
+
+```groovy
+compile 'com.everalbum.roliedex:roliedex:1.0.0'
+```
+
+Or if you like using [Jitpack.io](https://jitpack.io) you can include it in your gradle file like so:
+
+```groovy
+repositories {
+  maven { url "https://jitpack.io" }
+}
+
+dependencies {
+  compile 'com.github.everalbum:roliedex:v1.0.0'
+}
+```
 
 ## Supported attributes (with default values)
 
