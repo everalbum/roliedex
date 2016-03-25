@@ -13,7 +13,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
-        versionName "1.0"
+        versionName version
     }
     buildTypes {
         release {
@@ -30,6 +30,41 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'org.assertj:assertj-core:1.7.1'
 }
+
+task createPom {
+    pom {
+        project {
+            packaging 'jar'
+
+            // Add your description here
+            name 'roliedex'
+            description 'An Android View to show independently spinning digits.'
+            url 'https://github.com/everalbum/roliedex'
+
+            // Set your license
+            licenses {
+                license {
+                    name 'The BSD 3-Clause License'
+                    url 'https://github.com/everalbum/roliedex/blob/master/LICENSE'
+                }
+            }
+
+            developers {
+                developer {
+                    id 'everalbum'
+                    name 'Everalbum, Inc.'
+                    email 'ralph@everalbum.com'
+                }
+            }
+            scm {
+                connection 'https://github.com/everalbum/roliedex'
+                developerConnection 'https://github.com/everalbum/roliedex'
+                url 'https://github.com/everalbum/roliedex'
+            }
+        }
+    }.writeTo("$buildDir/poms/pom-default.xml").writeTo("pom.xml")
+}
+build.dependsOn createPom
 
 task androidJavadocs(type: Javadoc) {
     options {
