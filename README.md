@@ -2,7 +2,7 @@
 
 An Android View to show independently spinning digits.
 
-![Demo](/roliedex_demo_.gif "roliedex demo")
+![Demo](/roliedex_demo.gif "roliedex demo")
 
 ## Usage
 
