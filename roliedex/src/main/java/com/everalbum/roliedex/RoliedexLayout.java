@@ -25,15 +25,13 @@ public class RoliedexLayout extends LinearLayout {
     private long animDuration;
     private int  textSize;
     private int  textColor;
-    private int  numberOfDigits;
-    private int  numberOfDecimals;
     private int  slideInAnimation;
     private int  slideOutAnimation;
 
     // digits[0] is the ones, digits[1] is tens, and so on
-    private final TextSwitcher[] digits;
+    private TextSwitcher[] digits;
     // decimals[0] is the tenths, decimals[1] is hundredths, and so on
-    private final TextSwitcher[] decimals;
+    private TextSwitcher[] decimals;
 
     private TextSwitcher decimalPoint;
     private TextSwitcher decorator;
@@ -51,21 +49,27 @@ public class RoliedexLayout extends LinearLayout {
     private boolean animationEnded;
 
     public RoliedexLayout(Context context) {
-        this(context, null);
+        super(context, null);
+        init(context, null, 0, 0);
     }
 
     public RoliedexLayout(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
+        init(context, attrs, 0, 0);
     }
 
     public RoliedexLayout(Context context, AttributeSet attrs, int defStyleAttr) {
-        this(context, attrs, defStyleAttr, 0);
+        super(context, attrs, defStyleAttr);
+        init(context, attrs, defStyleAttr, 0);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public RoliedexLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        init(context, attrs, defStyleAttr, defStyleRes);
+    }
 
+    private void init(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         TypedArray attr = context.obtainStyledAttributes(attrs,
                                                          R.styleable.RoliedexLayout,
                                                          defStyleAttr,
@@ -74,8 +78,8 @@ public class RoliedexLayout extends LinearLayout {
         textSize = attr.getInt(R.styleable.RoliedexLayout_textSize, 15);
         textColor = attr.getColor(R.styleable.RoliedexLayout_textColor,
                                   getColor(android.R.color.black));
-        numberOfDigits = attr.getInt(R.styleable.RoliedexLayout_numberOfDigits, 3);
-        numberOfDecimals = attr.getInt(R.styleable.RoliedexLayout_numberOfDecimals, 2);
+        final int numberOfDigits = attr.getInt(R.styleable.RoliedexLayout_numberOfDigits, 3);
+        final int numberOfDecimals = attr.getInt(R.styleable.RoliedexLayout_numberOfDecimals, 2);
         slideInAnimation = attr.getResourceId(R.styleable.RoliedexLayout_slideInAnimation,
                                               R.anim.slide_in_from_bottom);
         slideOutAnimation = attr.getResourceId(R.styleable.RoliedexLayout_slideOutAnimation,
@@ -191,8 +195,8 @@ public class RoliedexLayout extends LinearLayout {
         }
 
         if (value % 1 > 0 || forceDedimal) {
-            for (int i = 0; i < decimals.length; i++) {
-                decimals[i].setText(DIGITS[random.nextInt(10)]);
+            for (final TextSwitcher decimal : decimals) {
+                decimal.setText(DIGITS[random.nextInt(10)]);
             }
         }
     }
