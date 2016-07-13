@@ -247,6 +247,13 @@ public class RoliedexLayout extends LinearLayout {
         startNextAnimation();
     }
 
+    // Overload that allows custom animDuration
+    // Useful for spins where we don't know number in advance / waiting on server response
+    public void setText(double value, @Nullable String decorator, boolean forceDecimal, int animDuration) {
+        this.animDuration = animDuration;
+        setText(value, decorator, forceDecimal);
+    }
+
     protected void clearPastDigitsAndDecimals() {
         digNums = new int[digits.length];
         decNums = new int[decimals.length];
