@@ -16,6 +16,7 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import java.util.Observer;
 import java.util.Random;
 
 public class RoliedexLayout extends LinearLayout {
@@ -47,6 +48,8 @@ public class RoliedexLayout extends LinearLayout {
     private double  value;
     private long    animationStartTime;
     private boolean animationEnded;
+
+    private Observer onAnimationFinish;
 
     public RoliedexLayout(Context context) {
         super(context, null);
@@ -220,6 +223,9 @@ public class RoliedexLayout extends LinearLayout {
                 decimals[i].setText(DIGITS[decNums[i]]);
             }
         }
+
+        if (onAnimationFinish != null)
+            onAnimationFinish.update(null, null);
     }
 
     /**
@@ -244,6 +250,7 @@ public class RoliedexLayout extends LinearLayout {
 
         animationStartTime = System.currentTimeMillis();
         animationEnded = false;
+        onAnimationFinish = null;
         startNextAnimation();
     }
 
@@ -252,6 +259,13 @@ public class RoliedexLayout extends LinearLayout {
     public void setText(double value, @Nullable String decorator, boolean forceDecimal, int animDuration) {
         this.animDuration = animDuration;
         setText(value, decorator, forceDecimal);
+    }
+
+    // Overload allowing notice once animation finishes
+    public void setText(double value, @Nullable String decorator, boolean forceDecimal,
+                        int animDuration, Observer onFinish) {
+        setText(value, decorator, forceDecimal, animDuration);
+        onAnimationFinish = onFinish;
     }
 
     protected void clearPastDigitsAndDecimals() {
