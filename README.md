@@ -37,7 +37,7 @@ Below is also documentation on the individual attributes we support.
 Simply imported it into your gradle project like so:
 
 ```groovy
-compile 'com.everalbum.roliedex:roliedex:1.0.1@aar'
+compile 'com.everalbum.roliedex:roliedex:1.0.3@aar'
 ```
 
 Or if you like using [Jitpack.io](https://jitpack.io) you can include it in your gradle file like so:
@@ -48,9 +48,11 @@ repositories {
 }
 
 dependencies {
-  compile 'com.everalbum.roliedex:roliedex:1.0.1@aar'
+  compile 'com.everalbum.roliedex:roliedex:1.0.3@aar'
 }
 ```
+
+Be sure to visit [release page to verify latest version](https://github.com/everalbum/roliedex/releases)... sometimes new versions are released without update to this page (Readme.md).
 
 ## Supported attributes (with default values)
 
