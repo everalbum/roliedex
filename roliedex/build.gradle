@@ -91,28 +91,31 @@ artifacts {
     archives androidJavadocsJar
 }
 
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def propFile = project.rootProject.file('local.properties')
+if (propFile.exists()) {
+    Properties properties = new Properties()
+    properties.load(propFile.newDataInputStream())
 
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-    configurations = ['archives']
-    pkg {
-        repo = 'maven'
-        name = 'roliedex'
-        desc = 'An Android View to show independently spinning digits.'
-        websiteUrl = 'https://github.com/everalbum/roliedex'
-        issueTrackerUrl = 'https://github.com/everalbum/roliedex/issues'
-        vcsUrl = 'https://github.com/everalbum/roliedex.git'
-        userOrg = 'everalbum'
-        licenses = ['MIT']
-        publish = true
-        publicDownloadNumbers = true
-        version {
-            name = version
+    bintray {
+        user = properties.getProperty("bintray.user")
+        key = properties.getProperty("bintray.apikey")
+        configurations = ['archives']
+        pkg {
+            repo = 'maven'
+            name = 'roliedex'
             desc = 'An Android View to show independently spinning digits.'
-            vcsTag = version
+            websiteUrl = 'https://github.com/everalbum/roliedex'
+            issueTrackerUrl = 'https://github.com/everalbum/roliedex/issues'
+            vcsUrl = 'https://github.com/everalbum/roliedex.git'
+            userOrg = 'everalbum'
+            licenses = ['MIT']
+            publish = true
+            publicDownloadNumbers = true
+            version {
+                name = version
+                desc = 'An Android View to show independently spinning digits.'
+                vcsTag = version
+            }
         }
     }
 }
