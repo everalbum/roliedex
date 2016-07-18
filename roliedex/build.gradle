@@ -5,7 +5,7 @@ version = '1.0.3'
 
 ext {
     PUBLISH_GROUP_ID = 'com.everalbum.roliedex'
-    PUBLISH_ARTIFACT_ID = 'rolidex'
+    PUBLISH_ARTIFACT_ID = 'roliedex'
     PUBLISH_VERSION = '1.0.3'
 }
 
