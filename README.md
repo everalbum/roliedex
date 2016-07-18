@@ -37,7 +37,7 @@ Below is also documentation on the individual attributes we support.
 Simply imported it into your gradle project like so:
 
 ```groovy
-compile 'com.everalbum.roliedex:roliedex:1.0.3@aar'
+compile 'com.everalbum.roliedex:roliedex:1.0.3'
 ```
 
 Or if you like using [Jitpack.io](https://jitpack.io) you can include it in your gradle file like so:
@@ -48,7 +48,7 @@ repositories {
 }
 
 dependencies {
-  compile 'com.everalbum.roliedex:roliedex:1.0.3@aar'
+  compile 'com.everalbum.roliedex:roliedex:1.0.3'
 }
 ```
 
@@ -117,3 +117,24 @@ Be sure to visit [release page to verify latest version](https://github.com/ever
  - We currently show all trailing decimal digits. So if the number is `0.1` and you pass `app:numberOfDecimals="2"` we will display `0.10`.
  - We currently do not support commas or dots to format large numbers.
  - No localization support :(
+ 
+## Releasing
+
+Run gradle command:
+```
+./gradlew clean build generateRelease
+```
+
+Packages to upload will be under:
+roliedex/build/release-<versiob>.zip
+
+Upload these:
+1) Go to http://bintray.com/everalbum/maven/roliedex
+2) Click "New Version"
+3) Click into new version
+4) Click "Upload Files""
+5) Drag zip file to upload
+6) Make sure to check box "Explode this archive"
+7) Click "Save Changes"
+
+Check out this guide: https://medium.com/@tigr/how-to-publish-your-android-studio-library-to-jcenter-5384172c4739#.s2ixju5xl
