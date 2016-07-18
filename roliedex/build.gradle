@@ -1,9 +1,13 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
 
 group = 'com.everalbum.roliedex'
 version = '1.0.3'
+
+ext {
+    PUBLISH_GROUP_ID = 'com.everalbum.roliedex'
+    PUBLISH_ARTIFACT_ID = 'rolidex'
+    PUBLISH_VERSION = '1.0.3'
+}
 
 android {
     compileSdkVersion 23
@@ -32,90 +36,4 @@ dependencies {
     testCompile 'org.assertj:assertj-core:1.7.1'
 }
 
-install {
-    repositories.mavenInstaller {
-        pom {
-            project {
-                packaging 'jar'
-
-                // Add your description here
-                name 'roliedex'
-                description 'An Android View to show independently spinning digits.'
-                url 'https://github.com/everalbum/roliedex'
-
-                // Set your license
-                licenses {
-                    license {
-                        name 'MIT'
-                        url 'https://github.com/everalbum/roliedex/blob/master/LICENSE'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id 'everalbum'
-                        name 'Everalbum, Inc.'
-                        email 'ralph@everalbum.com'
-                    }
-                }
-                scm {
-                    connection 'https://github.com/everalbum/roliedex'
-                    developerConnection 'https://github.com/everalbum/roliedex'
-                    url 'https://github.com/everalbum/roliedex'
-                }
-            }
-        }
-    }
-}
-
-task androidJavadocs(type: Javadoc) {
-    options {
-        linksOffline "http://d.android.com/reference", "${android.sdkDirectory}/docs/reference"
-    }
-    failOnError false
-    source = "src/main/java"
-    classpath += project.files(project.android.getBootClasspath().join(File.pathSeparator))
-}
-
-task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
-    classifier = 'javadoc'
-    from androidJavadocs.destinationDir
-}
-
-task androidSourcesJar(type: Jar) {
-    from "src/main/java"
-}
-
-artifacts {
-    archives androidSourcesJar
-    archives androidJavadocsJar
-}
-
-def propFile = project.rootProject.file('local.properties')
-if (propFile.exists()) {
-    Properties properties = new Properties()
-    properties.load(propFile.newDataInputStream())
-
-    bintray {
-        user = properties.getProperty("bintray.user")
-        key = properties.getProperty("bintray.apikey")
-        configurations = ['archives']
-        pkg {
-            repo = 'maven'
-            name = 'roliedex'
-            desc = 'An Android View to show independently spinning digits.'
-            websiteUrl = 'https://github.com/everalbum/roliedex'
-            issueTrackerUrl = 'https://github.com/everalbum/roliedex/issues'
-            vcsUrl = 'https://github.com/everalbum/roliedex.git'
-            userOrg = 'everalbum'
-            licenses = ['MIT']
-            publish = true
-            publicDownloadNumbers = true
-            version {
-                name = version
-                desc = 'An Android View to show independently spinning digits.'
-                vcsTag = version
-            }
-        }
-    }
-}
+apply from: 'https://raw.githubusercontent.com/blundell/release-android-library/master/android-release-aar.gradle'
